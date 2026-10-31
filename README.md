@@ -152,3 +152,14 @@ The URL scanner uses basic suspicious indicators and should not be considered a 
 ## License
 
 This project is available for educational and learning purposes.
+
+## Application Screenshots
+
+### Dashboard
+![Application Dashboard](screenshots/dashboard.png)
+
+### Phishing Email Detection
+![Phishing Detection Result](screenshots/phishing-detection.png)
+
+### Detection History
+![Detection History](screenshots/detection-history.png)
