@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Phishing Email Detection System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>AI Phishing Email Detector</h1>
+        <p class="description">
+            An intelligent email security system powered by Machine Learning.
+            Detect phishing emails and identify suspicious links.
+        </p>
+    </header>
+
+
+    <!-- DASHBOARD -->
+    <section class="dashboard">
+
+        <h2>System Dashboard</h2>
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card total-card">
+                <h3>Total Emails</h3>
+                <p>{{ stats.total }}</p>
+            </div>
+
+            <div class="dashboard-card phishing-card">
+                <h3>Phishing Emails</h3>
+                <p>{{ stats.phishing }}</p>
+            </div>
+
+            <div class="dashboard-card legitimate-card">
+                <h3>Legitimate Emails</h3>
+                <p>{{ stats.legitimate }}</p>
+            </div>
+
+            <div class="dashboard-card percentage-card">
+                <h3>Phishing Percentage</h3>
+                <p>{{ stats.phishing_percentage }}%</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EMAIL DETECTION -->
+    <section class="detection-section">
+
+        <h2>Analyse an Email</h2>
+
+        <p class="section-description">
+            Paste an email message below to check whether it is phishing
+            or legitimate.
+        </p>
+
+        <form method="POST">
+
+            <textarea
+                name="email"
+                placeholder="Paste your email message here..."
+                required>{{ email_text or '' }}</textarea>
+
+            <button type="submit">Check Email</button>
+
+        </form>
+
+    </section>
+
+
+    <!-- PREDICTION RESULT -->
+    {% if result %}
+
+    <section class="result {{ result.type }}">
+
+        <h2>{{ result.message }}</h2>
+
+        <p>
+            Prediction Confidence: {{ result.confidence }}%
+        </p>
+
+        <p class="disclaimer">
+            This is a machine-learning prediction, not a guarantee
+            of email safety.
+        </p>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- URL ANALYSIS -->
+    {% if url_results %}
+
+    <section class="url-analysis">
+
+        <h2>URL Security Analysis</h2>
+
+        {% for item in url_results %}
+
+        <div class="url-item">
+
+            <p>
+                <strong>Detected URL:</strong>
+                {{ item.url }}
+            </p>
+
+            {% if item.warnings %}
+
+                <p class="warning-title">Warning Signs:</p>
+
+                <ul>
+                    {% for warning in item.warnings %}
+                        <li>{{ warning }}</li>
+                    {% endfor %}
+                </ul>
+
+            {% else %}
+
+                <p class="safe-message">
+                    No basic URL warning signs detected.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- DETECTION HISTORY -->
+    <section class="history-section">
+
+        <h2>Email Detection History</h2>
+
+        <p class="history-description">
+            Previously analysed emails and their prediction results.
+        </p>
+
+        {% if history %}
+
+        <div class="history-table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Prediction</th>
+                        <th>Confidence</th>
+                        <th>Date Checked</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for record in history %}
+
+                    <tr>
+                        <td>{{ record.id }}</td>
+
+                        <td>
+                            <span class="status {{ record.prediction|lower }}">
+                                {{ record.prediction }}
+                            </span>
+                        </td>
+
+                        <td>{{ record.confidence }}%</td>
+
+                        <td>{{ record.date_checked }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <p class="empty-history">
+            No emails have been analysed yet.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>
+            AI-Based Phishing Email Detection System
+        </p>
+        <p>
+            Powered by Machine Learning and Flask
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>
